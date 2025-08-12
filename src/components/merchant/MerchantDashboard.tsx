@@ -15,18 +15,22 @@ const MerchantDashboard: React.FC = () => {
     <div className="flex h-screen bg-gray-100">
       <MerchantSidebar />
       <div className="flex-1 flex flex-col overflow-hidden">
+        {/* Mobile top spacing to account for hamburger menu */}
+        <div className="md:hidden h-16"></div>
         <main className="flex-1 overflow-x-hidden overflow-y-auto bg-gray-50">
-          <Routes>
-            <Route path="/" element={<Navigate to="overview" replace />} />
-            <Route path="overview" element={<MerchantOverview />} />
-            <Route path="analytics" element={<AnalyticsPage />} />
-            <Route path="campaigns" element={<CampaignManagement />} />
-            <Route path="assets" element={<MarketingAssets />} />
-            <Route path="affiliates" element={<AffiliateManagement />} />
-            <Route path="payouts" element={<PayoutProcessing />} />
-            <Route path="transactions" element={<TransactionHistory />} />
-            <Route path="signup-page" element={<CustomizeSignupPage />} />
-          </Routes>
+          <div className="min-h-full">
+            <Routes>
+              <Route path="/" element={<Navigate to="overview" replace />} />
+              <Route path="overview" element={<MerchantOverview />} />
+              <Route path="analytics" element={<AnalyticsPage />} />
+              <Route path="campaigns" element={<CampaignManagement />} />
+              <Route path="assets" element={<MarketingAssets />} />
+              <Route path="affiliates" element={<AffiliateManagement />} />
+              <Route path="payouts" element={<PayoutProcessing />} />
+              <Route path="transactions" element={<TransactionHistory />} />
+              <Route path="signup-page" element={<CustomizeSignupPage />} />
+            </Routes>
+          </div>
         </main>
       </div>
     </div>
