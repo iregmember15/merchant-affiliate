@@ -4,11 +4,13 @@ import MerchantSidebar from './MerchantSidebar';
 import MerchantOverview from './MerchantOverview';
 import AnalyticsPage from './AnalyticsPage';
 import CampaignManagement from './CampaignManagement';
-import MarketingAssets from './MarketingAssets';
+import BannersPage from './BannersPage';
+import PromoCodesPage from './PromoCodesPage';
 import AffiliateManagement from './AffiliateManagement';
 import PayoutProcessing from './PayoutProcessing';
 import TransactionHistory from './TransactionHistory';
 import CustomizeSignupPage from './CustomizeSignupPage';
+import SettingsPage from './SettingsPage';
 
 const MerchantDashboard: React.FC = () => {
   return (
@@ -24,11 +26,13 @@ const MerchantDashboard: React.FC = () => {
               <Route path="overview" element={<MerchantOverview />} />
               <Route path="analytics" element={<AnalyticsPage />} />
               <Route path="campaigns" element={<CampaignManagement />} />
-              <Route path="assets" element={<MarketingAssets />} />
+              <Route path="banners" element={<BannersPage />} />
+              <Route path="promo-codes" element={<PromoCodesPage />} />
               <Route path="affiliates" element={<AffiliateManagement />} />
               <Route path="payouts" element={<PayoutProcessing />} />
               <Route path="transactions" element={<TransactionHistory />} />
               <Route path="signup-page" element={<CustomizeSignupPage />} />
+              <Route path="settings" element={<SettingsPage />} />
             </Routes>
           </div>
         </main>

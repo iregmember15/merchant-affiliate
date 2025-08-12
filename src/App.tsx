@@ -1,6 +1,8 @@
 import React from 'react';
 import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
 import AuthPage from './components/AuthPage';
+import LandingPage from './components/LandingPage';
+import ReferralTrackingPage from './components/ReferralTrackingPage';
 import MerchantDashboard from './components/merchant/MerchantDashboard';
 import AffiliateDashboard from './components/affiliate/AffiliateDashboard';
 import { AuthProvider, useAuth } from './contexts/AuthContext';
@@ -25,6 +27,8 @@ const App: React.FC = () => {
       <Router>
         <div className="min-h-screen bg-gray-50">
           <Routes>
+            <Route path="/" element={<LandingPage />} />
+            <Route path="/tracking" element={<ReferralTrackingPage />} />
             <Route path="/auth" element={<AuthPage />} />
             <Route 
               path="/merchant/*" 
@@ -42,7 +46,6 @@ const App: React.FC = () => {
                 </PrivateRoute>
               } 
             />
-            <Route path="/" element={<Navigate to="/auth" replace />} />
           </Routes>
         </div>
       </Router>

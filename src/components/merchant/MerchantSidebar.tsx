@@ -17,11 +17,13 @@ const MerchantSidebar: React.FC = () => {
     { name: 'Overview', href: 'overview', icon: HeroIcons.ChartBarIcon },
     { name: 'Analytics', href: 'analytics', icon: HeroIcons.ChartBarIcon },
     { name: 'Campaigns', href: 'campaigns', icon: HeroIcons.MegaphoneIcon },
-    { name: 'Marketing Assets', href: 'assets', icon: HeroIcons.PhotoIcon },
+    { name: 'Banners', href: 'banners', icon: HeroIcons.PhotoIcon },
+    { name: 'Promo Codes', href: 'promo-codes', icon: HeroIcons.TagIcon },
     { name: 'Affiliates', href: 'affiliates', icon: HeroIcons.UserGroupIcon },
     { name: 'Payout Processing', href: 'payouts', icon: HeroIcons.CreditCardIcon },
     { name: 'Transaction History', href: 'transactions', icon: HeroIcons.DocumentTextIcon },
     { name: 'Customize Signup', href: 'signup-page', icon: HeroIcons.CogIcon },
+    { name: 'Settings', href: 'settings', icon: HeroIcons.CogIcon },
   ];
 
   const SidebarContent = () => (

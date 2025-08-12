@@ -11,7 +11,9 @@ import {
   ArrowRightOnRectangleIcon,
   UserGroupIcon,
   Bars3Icon,
-  XMarkIcon
+  XMarkIcon,
+  UserIcon,
+  MegaphoneIcon
 } from '@heroicons/react/24/outline';
 
 const AffiliateSidebar: React.FC = () => {
@@ -27,11 +29,13 @@ const AffiliateSidebar: React.FC = () => {
   const navigation = [
     { name: 'Overview', href: 'overview', icon: ChartBarIcon },
     { name: 'Analytics', href: 'analytics', icon: ChartBarIcon },
+    { name: 'Campaigns', href: 'campaigns', icon: MegaphoneIcon },
     { name: 'Referral Links', href: 'referral-links', icon: LinkIcon },
     { name: 'Marketing Assets', href: 'assets', icon: PhotoIcon },
     { name: 'Promo Codes', href: 'promo-codes', icon: TagIcon },
     { name: 'Payout Methods', href: 'payout-methods', icon: CreditCardIcon },
     { name: 'Payout History', href: 'payout-history', icon: DocumentTextIcon },
+    { name: 'Profile Settings', href: 'profile-settings', icon: UserIcon },
   ];
 
   const SidebarContent = () => (
