@@ -1,0 +1,36 @@
+import React from 'react';
+import { Routes, Route, Navigate } from 'react-router-dom';
+import MerchantSidebar from './MerchantSidebar';
+import MerchantOverview from './MerchantOverview';
+import AnalyticsPage from './AnalyticsPage';
+import CampaignManagement from './CampaignManagement';
+import MarketingAssets from './MarketingAssets';
+import AffiliateManagement from './AffiliateManagement';
+import PayoutProcessing from './PayoutProcessing';
+import TransactionHistory from './TransactionHistory';
+import CustomizeSignupPage from './CustomizeSignupPage';
+
+const MerchantDashboard: React.FC = () => {
+  return (
+    <div className="flex h-screen bg-gray-100">
+      <MerchantSidebar />
+      <div className="flex-1 flex flex-col overflow-hidden">
+        <main className="flex-1 overflow-x-hidden overflow-y-auto bg-gray-50">
+          <Routes>
+            <Route path="/" element={<Navigate to="overview" replace />} />
+            <Route path="overview" element={<MerchantOverview />} />
+            <Route path="analytics" element={<AnalyticsPage />} />
+            <Route path="campaigns" element={<CampaignManagement />} />
+            <Route path="assets" element={<MarketingAssets />} />
+            <Route path="affiliates" element={<AffiliateManagement />} />
+            <Route path="payouts" element={<PayoutProcessing />} />
+            <Route path="transactions" element={<TransactionHistory />} />
+            <Route path="signup-page" element={<CustomizeSignupPage />} />
+          </Routes>
+        </main>
+      </div>
+    </div>
+  );
+};
+
+export default MerchantDashboard;
