@@ -47,7 +47,7 @@ export interface TransactionData {
 }
 
 // Generate dummy data for the last 30 days
-const generateDailyData = (baseValue: number, variance: number = 0.3): ChartDataPoint[] => {
+const generateDailyData = (baseValue: number, variance = 0.3): ChartDataPoint[] => {
   const data: ChartDataPoint[] = [];
   const today = new Date();
   
@@ -72,7 +72,7 @@ const generateDailyData = (baseValue: number, variance: number = 0.3): ChartData
 };
 
 // Generate dummy data for the last 12 months
-const generateMonthlyData = (baseValue: number, variance: number = 0.4): ChartDataPoint[] => {
+const generateMonthlyData = (baseValue: number, variance = 0.4): ChartDataPoint[] => {
   const data: ChartDataPoint[] = [];
   const today = new Date();
   
