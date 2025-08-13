@@ -41,7 +41,7 @@ const AnalyticsPage: React.FC = () => {
       name: 'Total Earnings',
       value: formatCurrency(totalEarnings),
       icon: CurrencyDollarIcon,
-      color: 'text-green-500',
+      color: 'text-blue-500',
       change: '+12.5%',
       changeType: 'positive' as const
     },
@@ -137,7 +137,7 @@ const AnalyticsPage: React.FC = () => {
             data={analytics.dailyEarnings}
             title="Earnings Trend"
             dataKey="earnings"
-            color="#10B981"
+            color="#2563EB"
             formatValue={formatCurrency}
             height={350}
           />
@@ -238,7 +238,7 @@ const AnalyticsPage: React.FC = () => {
                         <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
                           {formatPercentage(device.conversionRate)}
                         </td>
-                        <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-green-600">
+                         <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-blue-600">
                           {formatCurrency(device.earnings)}
                         </td>
                       </tr>
@@ -319,12 +319,12 @@ const AnalyticsPage: React.FC = () => {
                       <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
                         {formatCurrency(campaign.revenue)}
                       </td>
-                      <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-green-600">
+                      <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-blue-600">
                         {formatCurrency(campaign.earnings)}
                       </td>
                       <td className="px-6 py-4 whitespace-nowrap">
                         <span className={`inline-flex px-2 py-1 text-xs font-semibold rounded-full ${
-                          campaign.status === 'active' ? 'bg-green-100 text-green-800' :
+                          campaign.status === 'active' ? 'bg-blue-100 text-blue-800' :
                           campaign.status === 'paused' ? 'bg-yellow-100 text-yellow-800' :
                           'bg-gray-100 text-gray-800'
                         }`}>

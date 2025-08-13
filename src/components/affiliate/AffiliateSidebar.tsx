@@ -23,7 +23,7 @@ const AffiliateSidebar: React.FC = () => {
 
   const handleLogout = () => {
     logout();
-    navigate('/auth');
+    navigate('/');
   };
 
   const navigation = [
@@ -41,7 +41,7 @@ const AffiliateSidebar: React.FC = () => {
   const SidebarContent = () => (
     <div className="flex flex-col w-64">
       <div className="flex flex-col h-0 flex-1 bg-white border-r border-gray-200">
-        <div className="flex items-center justify-between h-16 flex-shrink-0 px-4 bg-green-600">
+        <div className="flex items-center justify-between h-16 flex-shrink-0 px-4 bg-blue-600">
           <div className="flex items-center">
             <UserGroupIcon className="h-8 w-8 text-white" />
             <h1 className="ml-2 text-xl font-semibold text-white">Affiliate Portal</h1>
@@ -49,7 +49,7 @@ const AffiliateSidebar: React.FC = () => {
           {/* Mobile close button */}
           <button
             onClick={() => setSidebarOpen(false)}
-            className="md:hidden p-1 rounded-md text-white hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-white"
+            className="md:hidden p-1 rounded-md text-white hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-white"
           >
             <XMarkIcon className="h-6 w-6" />
           </button>
@@ -65,7 +65,7 @@ const AffiliateSidebar: React.FC = () => {
                 className={({ isActive }) =>
                   `group flex items-center px-2 py-2 text-sm font-medium rounded-md ${
                     isActive
-                      ? 'bg-green-100 text-green-900'
+                      ? 'bg-blue-100 text-blue-900'
                       : 'text-gray-600 hover:bg-gray-50 hover:text-gray-900'
                   }`
                 }
@@ -85,7 +85,7 @@ const AffiliateSidebar: React.FC = () => {
             <div>
               <img
                 className="inline-block h-9 w-9 rounded-full"
-                src={`https://ui-avatars.com/api/?name=${user?.name}&background=22c55e&color=fff`}
+                src={`https://ui-avatars.com/api/?name=${user?.name}&background=2563eb&color=fff`}
                 alt=""
               />
             </div>
@@ -96,7 +96,7 @@ const AffiliateSidebar: React.FC = () => {
           </div>
           <button
             onClick={handleLogout}
-            className="ml-auto flex-shrink-0 bg-white p-1 rounded-full text-gray-400 hover:text-gray-500 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500"
+            className="ml-auto flex-shrink-0 bg-white p-1 rounded-full text-gray-400 hover:text-gray-500 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"
           >
             <ArrowRightOnRectangleIcon className="h-6 w-6" />
           </button>
@@ -111,7 +111,7 @@ const AffiliateSidebar: React.FC = () => {
       <div className="md:hidden fixed top-4 left-4 z-50">
         <button
           onClick={() => setSidebarOpen(true)}
-          className="p-2 rounded-md bg-green-600 text-white hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-green-500"
+          className="p-2 rounded-md bg-blue-600 text-white hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500"
         >
           <Bars3Icon className="h-6 w-6" />
         </button>

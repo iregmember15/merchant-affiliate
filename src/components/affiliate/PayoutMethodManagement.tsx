@@ -56,7 +56,7 @@ const PayoutMethodManagement: React.FC = () => {
       case 'paypal':
         return <BanknotesIcon className="h-6 w-6 text-blue-400" />;
       case 'wise':
-        return <GlobeAltIcon className="h-6 w-6 text-green-500" />;
+        return <GlobeAltIcon className="h-6 w-6 text-blue-500" />;
       default:
         return <CreditCardIcon className="h-6 w-6 text-gray-500" />;
     }
@@ -69,7 +69,7 @@ const PayoutMethodManagement: React.FC = () => {
       case 'paypal':
         return 'bg-blue-100 text-blue-800';
       case 'wise':
-        return 'bg-green-100 text-green-800';
+        return 'bg-blue-100 text-blue-800';
       default:
         return 'bg-gray-100 text-gray-800';
     }
@@ -111,7 +111,7 @@ const PayoutMethodManagement: React.FC = () => {
           <h1 className="text-2xl font-semibold text-gray-900">Payout Methods</h1>
           <button
             onClick={() => setShowAddModal(true)}
-            className="inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md shadow-sm text-white bg-green-600 hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500"
+            className="inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md shadow-sm text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"
           >
             <PlusIcon className="h-5 w-5 mr-2" />
             Add Payout Method
@@ -161,8 +161,8 @@ const PayoutMethodManagement: React.FC = () => {
 
                   <div className="flex items-center justify-between">
                     <span className="text-sm text-gray-500">Status:</span>
-                    <span className={`inline-flex items-center text-xs font-semibold ${
-                      method.isVerified ? 'text-green-600' : 'text-yellow-600'
+                     <span className={`inline-flex items-center text-xs font-semibold ${
+                      method.isVerified ? 'text-blue-600' : 'text-yellow-600'
                     }`}>
                       {method.isVerified ? (
                         <>
@@ -177,8 +177,8 @@ const PayoutMethodManagement: React.FC = () => {
 
                   <div className="flex items-center justify-between">
                     <span className="text-sm text-gray-500">Default:</span>
-                    <span className={`text-xs font-semibold ${
-                      method.isDefault ? 'text-green-600' : 'text-gray-500'
+                     <span className={`text-xs font-semibold ${
+                      method.isDefault ? 'text-blue-600' : 'text-gray-500'
                     }`}>
                       {method.isDefault ? 'Yes' : 'No'}
                     </span>
@@ -202,7 +202,7 @@ const PayoutMethodManagement: React.FC = () => {
                 )}
 
                 {method.isDefault && (
-                  <div className="mt-4 w-full bg-green-100 text-green-700 px-3 py-2 rounded-md text-sm font-medium text-center">
+                  <div className="mt-4 w-full bg-blue-100 text-blue-700 px-3 py-2 rounded-md text-sm font-medium text-center">
                     Default Method
                   </div>
                 )}
@@ -234,7 +234,7 @@ const PayoutMethodManagement: React.FC = () => {
                           setNewMethod({...newMethod, type: e.target.value as any});
                         }
                       }}
-                      className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-green-500 focus:border-green-500"
+                       className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-blue-500 focus:border-blue-500"
                     >
                       <option value="paypal">PayPal</option>
                       <option value="stripe">Stripe</option>
@@ -256,7 +256,7 @@ const PayoutMethodManagement: React.FC = () => {
                           setNewMethod({...newMethod, name: e.target.value});
                         }
                       }}
-                      className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-green-500 focus:border-green-500"
+                       className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-blue-500 focus:border-blue-500"
                       placeholder="e.g., My PayPal Account"
                     />
                   </div>
@@ -275,7 +275,7 @@ const PayoutMethodManagement: React.FC = () => {
                           setNewMethod({...newMethod, account: e.target.value});
                         }
                       }}
-                      className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-green-500 focus:border-green-500"
+                       className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-blue-500 focus:border-blue-500"
                       placeholder="Email, account number, etc."
                     />
                   </div>
@@ -300,7 +300,7 @@ const PayoutMethodManagement: React.FC = () => {
                         handleAddMethod();
                       }
                     }}
-                    className="px-4 py-2 text-sm font-medium text-white bg-green-600 rounded-md hover:bg-green-700"
+                    className="px-4 py-2 text-sm font-medium text-white bg-blue-600 rounded-md hover:bg-blue-700"
                   >
                     {editingMethod ? 'Update' : 'Add Method'}
                   </button>

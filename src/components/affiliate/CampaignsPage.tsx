@@ -145,7 +145,7 @@ const CampaignsPage: React.FC = () => {
   const getStatusColor = (status: string) => {
     switch (status) {
       case 'active':
-        return 'bg-green-100 text-green-800';
+        return 'bg-blue-100 text-blue-800';
       case 'paused':
         return 'bg-yellow-100 text-yellow-800';
       case 'ended':
@@ -159,7 +159,7 @@ const CampaignsPage: React.FC = () => {
     const colors = {
       'Fashion': 'bg-pink-100 text-pink-800',
       'Technology': 'bg-blue-100 text-blue-800',
-      'Home & Garden': 'bg-green-100 text-green-800',
+      'Home & Garden': 'bg-blue-100 text-blue-800',
       'Health & Fitness': 'bg-purple-100 text-purple-800',
       'Beauty': 'bg-rose-100 text-rose-800',
       'Gifts': 'bg-orange-100 text-orange-800'
@@ -203,8 +203,8 @@ const CampaignsPage: React.FC = () => {
         </div>
         <div className="bg-white rounded-lg shadow p-6">
           <div className="flex items-center">
-            <div className="p-2 bg-green-100 rounded-lg">
-              <CurrencyDollarIcon className="h-6 w-6 text-green-600" />
+            <div className="p-2 bg-blue-100 rounded-lg">
+              <CurrencyDollarIcon className="h-6 w-6 text-blue-600" />
             </div>
             <div className="ml-4">
               <p className="text-sm font-medium text-gray-600">Total Earnings</p>
@@ -308,8 +308,8 @@ const CampaignsPage: React.FC = () => {
                   </div>
                   <div className="text-xs text-gray-600">Commission</div>
                 </div>
-                <div className="text-center p-3 bg-green-50 rounded-lg">
-                  <div className="text-lg font-bold text-green-600">{campaign.cookieDuration}</div>
+                <div className="text-center p-3 bg-blue-50 rounded-lg">
+                  <div className="text-lg font-bold text-blue-600">{campaign.cookieDuration}</div>
                   <div className="text-xs text-gray-600">Cookie Days</div>
                 </div>
               </div>
@@ -330,7 +330,7 @@ const CampaignsPage: React.FC = () => {
                 </div>
                 <div className="flex justify-between text-sm">
                   <span className="text-gray-600">Total Earnings:</span>
-                  <span className="font-medium text-green-600">${campaign.totalEarnings.toFixed(2)}</span>
+                  <span className="font-medium text-blue-600">${campaign.totalEarnings.toFixed(2)}</span>
                 </div>
               </div>
 
@@ -347,7 +347,7 @@ const CampaignsPage: React.FC = () => {
                   className="flex-1 inline-flex items-center justify-center px-3 py-2 border border-gray-300 shadow-sm text-sm leading-4 font-medium rounded-md text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-blue-500"
                 >
                   {copiedLink === campaign.id ? (
-                    <ClipboardDocumentIcon className="h-4 w-4 text-green-500 mr-2" />
+                    <ClipboardDocumentIcon className="h-4 w-4 text-blue-500 mr-2" />
                   ) : (
                     <LinkIcon className="h-4 w-4 mr-2" />
                   )}

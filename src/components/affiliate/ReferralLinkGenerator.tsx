@@ -161,7 +161,7 @@ const ReferralLinkGenerator: React.FC = () => {
           <h1 className="text-2xl font-semibold text-gray-900">Referral Link Generator</h1>
           <button
             onClick={() => setShowCreateModal(true)}
-            className="inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md shadow-sm text-white bg-green-600 hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500"
+            className="inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md shadow-sm text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"
           >
             <PlusIcon className="h-5 w-5 mr-2" />
             Create New Link
@@ -190,7 +190,7 @@ const ReferralLinkGenerator: React.FC = () => {
             <div className="p-5">
               <div className="flex items-center">
                 <div className="flex-shrink-0">
-                  <GlobeAltIcon className="h-6 w-6 text-green-500" />
+                  <GlobeAltIcon className="h-6 w-6 text-blue-500" />
                 </div>
                 <div className="ml-5 w-0 flex-1">
                   <dl>
@@ -290,12 +290,12 @@ const ReferralLinkGenerator: React.FC = () => {
                           {link.conversions} conversions
                         </div>
                       </td>
-                      <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-green-600">
+                      <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-blue-600">
                         {formatCurrency(link.earnings)}
                       </td>
                       <td className="px-6 py-4 whitespace-nowrap">
                         <span className={`inline-flex px-2 py-1 text-xs font-semibold rounded-full ${
-                          link.status === 'active' ? 'bg-green-100 text-green-800' :
+                          link.status === 'active' ? 'bg-blue-100 text-blue-800' :
                           link.status === 'paused' ? 'bg-yellow-100 text-yellow-800' :
                           'bg-gray-100 text-gray-800'
                         }`}>
@@ -311,7 +311,7 @@ const ReferralLinkGenerator: React.FC = () => {
                           >
                             <DocumentDuplicateIcon className="h-4 w-4" />
                           </button>
-                          <button className="text-green-600 hover:text-green-900">
+                          <button className="text-blue-600 hover:text-blue-900">
                             <EyeIcon className="h-4 w-4" />
                           </button>
                           <button
@@ -348,7 +348,7 @@ const ReferralLinkGenerator: React.FC = () => {
                       type="text"
                       value={newLink.name}
                       onChange={(e) => setNewLink({...newLink, name: e.target.value})}
-                      className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-green-500 focus:border-green-500"
+                      className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-blue-500 focus:border-blue-500"
                       placeholder="e.g., Summer Sale Campaign"
                     />
                   </div>
@@ -361,7 +361,7 @@ const ReferralLinkGenerator: React.FC = () => {
                       type="url"
                       value={newLink.baseUrl}
                       onChange={(e) => setNewLink({...newLink, baseUrl: e.target.value})}
-                      className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-green-500 focus:border-green-500"
+                      className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-blue-500 focus:border-blue-500"
                       placeholder="https://example.com/product"
                     />
                   </div>
@@ -375,7 +375,7 @@ const ReferralLinkGenerator: React.FC = () => {
                         type="text"
                         value={newLink.utmSource}
                         onChange={(e) => setNewLink({...newLink, utmSource: e.target.value})}
-                        className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-green-500 focus:border-green-500"
+                        className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-blue-500 focus:border-blue-500"
                         placeholder="affiliate"
                       />
                     </div>
@@ -387,7 +387,7 @@ const ReferralLinkGenerator: React.FC = () => {
                         type="text"
                         value={newLink.utmMedium}
                         onChange={(e) => setNewLink({...newLink, utmMedium: e.target.value})}
-                        className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-green-500 focus:border-green-500"
+                        className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-blue-500 focus:border-blue-500"
                         placeholder="social, email, banner"
                       />
                     </div>
@@ -401,7 +401,7 @@ const ReferralLinkGenerator: React.FC = () => {
                       type="text"
                       value={newLink.utmCampaign}
                       onChange={(e) => setNewLink({...newLink, utmCampaign: e.target.value})}
-                      className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-green-500 focus:border-green-500"
+                      className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-blue-500 focus:border-blue-500"
                       placeholder="summer-sale-2024"
                     />
                   </div>
@@ -415,7 +415,7 @@ const ReferralLinkGenerator: React.FC = () => {
                         type="text"
                         value={newLink.utmTerm}
                         onChange={(e) => setNewLink({...newLink, utmTerm: e.target.value})}
-                        className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-green-500 focus:border-green-500"
+                        className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-blue-500 focus:border-blue-500"
                         placeholder="summer"
                       />
                     </div>
@@ -427,7 +427,7 @@ const ReferralLinkGenerator: React.FC = () => {
                         type="text"
                         value={newLink.utmContent}
                         onChange={(e) => setNewLink({...newLink, utmContent: e.target.value})}
-                        className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-green-500 focus:border-green-500"
+                        className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-blue-500 focus:border-blue-500"
                         placeholder="banner"
                       />
                     </div>
@@ -455,7 +455,7 @@ const ReferralLinkGenerator: React.FC = () => {
                   <button
                     onClick={handleCreateLink}
                     disabled={!newLink.name || !newLink.baseUrl || !newLink.utmMedium || !newLink.utmCampaign}
-                    className="px-4 py-2 text-sm font-medium text-white bg-green-600 rounded-md hover:bg-green-700 disabled:opacity-50 disabled:cursor-not-allowed"
+                    className="px-4 py-2 text-sm font-medium text-white bg-blue-600 rounded-md hover:bg-blue-700 disabled:opacity-50 disabled:cursor-not-allowed"
                   >
                     Create Link
                   </button>

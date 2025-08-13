@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
+import { useAuth } from '../contexts/AuthContext';
 import { 
   ChartBarIcon, 
   UserGroupIcon, 
@@ -127,6 +128,7 @@ const Header: React.FC = () => {
 };
 
 const LandingPage: React.FC = () => {
+  const { login } = useAuth();
   const features = [
     {
       icon: ChartBarIcon,
@@ -221,17 +223,19 @@ const LandingPage: React.FC = () => {
           </p>
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
             <Link
-              to="/auth"
+              to="/merchant"
+              onClick={() => login('guest@demo.com', 'guest', 'merchant')}
               className="inline-flex items-center px-8 py-3 border border-transparent text-base font-medium rounded-full text-white bg-blue-600 hover:bg-blue-700 transition-colors shadow-sm"
             >
               Continue as Merchent
             </Link>
-            <a
-              href="#features"
+            <Link
+              to="/affiliate"
+              onClick={() => login('guest@demo.com', 'guest', 'affiliate')}
               className="inline-flex items-center px-8 py-3 border border-gray-300 text-base font-medium rounded-full text-gray-700 bg-white hover:bg-gray-50 transition-colors"
             >
-              Contnue as Affiliate
-            </a>
+              Continue as Affiliate
+            </Link>
           </div>
         </div>
       </section>

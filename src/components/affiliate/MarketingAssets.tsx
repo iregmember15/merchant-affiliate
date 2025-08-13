@@ -69,7 +69,7 @@ const MarketingAssets: React.FC = () => {
       case 'banner':
         return <PhotoIcon className="h-8 w-8 text-blue-500" />;
       case 'promo-code':
-        return <TagIcon className="h-8 w-8 text-green-500" />;
+        return <TagIcon className="h-8 w-8 text-blue-500" />;
       case 'document':
         return <DocumentTextIcon className="h-8 w-8 text-purple-500" />;
       default:
@@ -82,7 +82,7 @@ const MarketingAssets: React.FC = () => {
       case 'banner':
         return 'bg-blue-100 text-blue-800';
       case 'promo-code':
-        return 'bg-green-100 text-green-800';
+        return 'bg-blue-100 text-blue-800';
       case 'document':
         return 'bg-purple-100 text-purple-800';
       default:
@@ -112,7 +112,7 @@ const MarketingAssets: React.FC = () => {
             <select
               value={filterType}
               onChange={(e) => setFilterType(e.target.value)}
-              className="border border-gray-300 rounded-md px-3 py-2 text-sm focus:outline-none focus:ring-green-500 focus:border-green-500"
+              className="border border-gray-300 rounded-md px-3 py-2 text-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500"
             >
               <option value="all">All Types</option>
               <option value="banner">Banners</option>
@@ -161,7 +161,7 @@ const MarketingAssets: React.FC = () => {
                     </button>
                     <button 
                       onClick={() => handleDownload(asset)}
-                      className="text-green-600 hover:text-green-900"
+                      className="text-blue-600 hover:text-blue-900"
                     >
                       <ArrowDownTrayIcon className="h-4 w-4" />
                     </button>

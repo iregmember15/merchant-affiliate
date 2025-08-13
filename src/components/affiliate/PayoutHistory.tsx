@@ -69,7 +69,7 @@ const PayoutHistory: React.FC = () => {
       case 'paypal':
         return <DocumentTextIcon className="h-5 w-5 text-blue-400" />;
       case 'wise':
-        return <DocumentTextIcon className="h-5 w-5 text-green-500" />;
+        return <DocumentTextIcon className="h-5 w-5 text-blue-500" />;
       default:
         return <DocumentTextIcon className="h-5 w-5 text-gray-500" />;
     }
@@ -78,7 +78,7 @@ const PayoutHistory: React.FC = () => {
   const getStatusColor = (status: string) => {
     switch (status) {
       case 'completed':
-        return 'bg-green-100 text-green-800';
+        return 'bg-blue-100 text-blue-800';
       case 'processing':
         return 'bg-blue-100 text-blue-800';
       case 'pending':
@@ -133,7 +133,7 @@ const PayoutHistory: React.FC = () => {
             <select
               value={filterStatus}
               onChange={(e) => setFilterStatus(e.target.value)}
-              className="border border-gray-300 rounded-md px-3 py-2 text-sm focus:outline-none focus:ring-green-500 focus:border-green-500"
+              className="border border-gray-300 rounded-md px-3 py-2 text-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500"
             >
               <option value="all">All Status</option>
               <option value="completed">Completed</option>
@@ -145,7 +145,7 @@ const PayoutHistory: React.FC = () => {
             <select
               value={filterMethod}
               onChange={(e) => setFilterMethod(e.target.value)}
-              className="border border-gray-300 rounded-md px-3 py-2 text-sm focus:outline-none focus:ring-green-500 focus:border-green-500"
+              className="border border-gray-300 rounded-md px-3 py-2 text-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500"
             >
               <option value="all">All Methods</option>
               <option value="paypal">PayPal</option>
@@ -256,7 +256,7 @@ const PayoutHistory: React.FC = () => {
             <div className="p-5">
               <div className="flex items-center">
                 <div className="flex-shrink-0">
-                  <div className="w-6 h-6 bg-green-500 rounded-full"></div>
+                  <div className="w-6 h-6 bg-blue-600 rounded-full"></div>
                 </div>
                 <div className="ml-5 w-0 flex-1">
                   <dl>

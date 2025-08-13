@@ -10,7 +10,7 @@ const MerchantSidebar: React.FC = () => {
 
   const handleLogout = () => {
     logout();
-    navigate('/auth');
+    navigate('/');
   };
 
   const navigation = [

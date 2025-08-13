@@ -51,7 +51,7 @@ const AffiliateOverview: React.FC = () => {
       change: `${earningsGrowth >= 0 ? '+' : ''}${earningsGrowth.toFixed(1)}%`,
       changeType: earningsGrowth >= 0 ? 'positive' : 'negative',
       icon: CurrencyDollarIcon,
-      color: 'text-green-500'
+      color: 'text-blue-500'
     },
     {
       name: 'Total Clicks',
@@ -133,7 +133,7 @@ const AffiliateOverview: React.FC = () => {
                         <div className="relative flex space-x-3">
                           <div>
                             <span className={`h-8 w-8 rounded-full flex items-center justify-center ring-8 ring-white ${
-                              activity.type === 'commission' ? 'bg-green-500' :
+                              activity.type === 'commission' ? 'bg-blue-500' :
                               activity.type === 'payout' ? 'bg-blue-500' :
                               activity.type === 'refund' ? 'bg-red-500' :
                               'bg-gray-500'
@@ -149,7 +149,7 @@ const AffiliateOverview: React.FC = () => {
                             </div>
                             <div className="text-right text-sm whitespace-nowrap">
                               <span className={`font-medium ${
-                                activity.amount > 0 ? 'text-green-600' :
+                                activity.amount > 0 ? 'text-blue-600' :
                                 activity.amount < 0 ? 'text-red-600' :
                                 'text-gray-500'
                               }`}>
@@ -250,12 +250,12 @@ const AffiliateOverview: React.FC = () => {
                       <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
                         {formatPercentage(campaign.conversionRate)}
                       </td>
-                      <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-green-600">
+                      <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-blue-600">
                         {formatCurrency(campaign.earnings)}
                       </td>
                       <td className="px-6 py-4 whitespace-nowrap">
                         <span className={`inline-flex px-2 py-1 text-xs font-semibold rounded-full ${
-                          campaign.status === 'active' ? 'bg-green-100 text-green-800' :
+                          campaign.status === 'active' ? 'bg-blue-100 text-blue-800' :
                           campaign.status === 'paused' ? 'bg-yellow-100 text-yellow-800' :
                           'bg-gray-100 text-gray-800'
                         }`}>

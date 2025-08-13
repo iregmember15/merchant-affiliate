@@ -62,7 +62,7 @@ const PromoCodeStats: React.FC = () => {
   const getStatusColor = (status: string) => {
     switch (status) {
       case 'active':
-        return 'bg-green-100 text-green-800';
+        return 'bg-blue-100 text-blue-800';
       case 'expired':
         return 'bg-red-100 text-red-800';
       case 'paused':
@@ -112,7 +112,7 @@ const PromoCodeStats: React.FC = () => {
             <div className="p-5">
               <div className="flex items-center">
                 <div className="flex-shrink-0">
-                  <div className="w-6 h-6 bg-green-500 rounded-full"></div>
+                  <div className="w-6 h-6 bg-blue-600 rounded-full"></div>
                 </div>
                 <div className="ml-5 w-0 flex-1">
                   <dl>
@@ -221,13 +221,13 @@ const PromoCodeStats: React.FC = () => {
                           </div>
                           <div className="w-full bg-gray-200 rounded-full h-2 mt-1">
                             <div 
-                              className="bg-green-600 h-2 rounded-full" 
+                              className="bg-blue-600 h-2 rounded-full" 
                               style={{ width: `${getUsagePercentage(promoCode.usage, promoCode.maxUsage)}%` }}
                             ></div>
                           </div>
                         </div>
                       </td>
-                      <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-green-600">
+                      <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-blue-600">
                         {promoCode.earnings}
                       </td>
                       <td className="px-6 py-4 whitespace-nowrap">
@@ -244,7 +244,7 @@ const PromoCodeStats: React.FC = () => {
                           >
                             <DocumentDuplicateIcon className="h-4 w-4" />
                           </button>
-                          <button className="text-green-600 hover:text-green-900">
+                          <button className="text-blue-600 hover:text-blue-900">
                             <EyeIcon className="h-4 w-4" />
                           </button>
                         </div>
