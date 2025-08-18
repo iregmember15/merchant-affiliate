@@ -19,6 +19,9 @@ interface PromoCode {
   expiryDate: string;
   status: 'active' | 'inactive' | 'expired';
   createdAt: string;
+  // Added (optional) to support assignment without breaking existing rows
+  affiliate?: string;
+  campaign?: string;
 }
 
 const PromoCodesPage: React.FC = () => {
@@ -77,6 +80,10 @@ const PromoCodesPage: React.FC = () => {
   const [editingCode, setEditingCode] = useState<PromoCode | null>(null);
   const [copiedCode, setCopiedCode] = useState<string | null>(null);
 
+  // Dummy lists for assignment (replace with API data later)
+  const affiliates = ['Affiliate123', 'AffiliateXYZ', 'Influencer007'];
+  const campaigns = ['Campaign A', 'Campaign B', 'Summer', 'Default'];
+
   const copyToClipboard = (code: string) => {
     navigator.clipboard.writeText(code);
     setCopiedCode(code);
@@ -102,6 +109,114 @@ const PromoCodesPage: React.FC = () => {
 
   const getUsagePercentage = (current: number, max: number) => {
     return Math.round((current / max) * 100);
+  };
+
+  // ---- Create Promo Code form state ----
+  type CreateForm = {
+    code: string;
+    type: 'percentage' | 'fixed';
+    value: number | '';
+    minOrder: number | '';
+    maxUses: number | '';
+    expiryDate: string;
+    affiliate: string;
+    campaign: string;
+  };
+
+  const [formData, setFormData] = useState<CreateForm>({
+    code: '',
+    type: 'percentage',
+    value: '',
+    minOrder: '',
+    maxUses: '',
+    expiryDate: '',
+    affiliate: '',
+    campaign: ''
+  });
+
+  const [errors, setErrors] = useState<Record<string, string>>({});
+
+  const handleFormChange = (
+    e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>
+  ) => {
+    const { name, value } = e.target;
+    setFormData(prev => ({
+      ...prev,
+      [name]:
+        name === 'code'
+          ? value.toUpperCase().replace(/\s+/g, '')
+          : value
+    }));
+  };
+
+  const validate = (): boolean => {
+    const v: Record<string, string> = {};
+
+    if (!formData.code.trim()) v.code = 'Promo code is required';
+    if (promoCodes.some(c => c.code.toUpperCase() === formData.code.toUpperCase())) {
+      v.code = 'This promo code already exists';
+    }
+
+    const val = Number(formData.value);
+    if (!val || isNaN(val)) v.value = 'Enter a valid discount value';
+    else if (formData.type === 'percentage' && (val <= 0 || val > 100))
+      v.value = 'Percentage must be 1–100';
+    else if (formData.type === 'fixed' && val <= 0)
+      v.value = 'Amount must be greater than 0';
+
+    const minOrderNum = Number(formData.minOrder);
+    if (isNaN(minOrderNum) || minOrderNum < 0) v.minOrder = 'Min order must be 0 or more';
+
+    const maxUsesNum = Number(formData.maxUses);
+    if (!maxUsesNum || isNaN(maxUsesNum) || maxUsesNum < 1)
+      v.maxUses = 'Max uses must be at least 1';
+
+    if (!formData.expiryDate) v.expiryDate = 'Expiry date is required';
+
+    if (!formData.affiliate) v.affiliate = 'Assign an affiliate';
+    if (!formData.campaign) v.campaign = 'Select a campaign';
+
+    setErrors(v);
+    return Object.keys(v).length === 0;
+  };
+
+  const handleCreateSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!validate()) return;
+
+    const today = new Date();
+    today.setHours(0, 0, 0, 0);
+    const exp = new Date(formData.expiryDate);
+    exp.setHours(0, 0, 0, 0);
+
+    const newItem: PromoCode = {
+      id: String(Date.now()),
+      code: formData.code.trim().toUpperCase(),
+      type: formData.type,
+      value: Number(formData.value),
+      minOrder: Number(formData.minOrder),
+      maxUses: Number(formData.maxUses),
+      currentUses: 0,
+      expiryDate: formData.expiryDate,
+      status: exp < today ? 'expired' : 'active',
+      createdAt: new Date().toISOString().split('T')[0],
+      affiliate: formData.affiliate,
+      campaign: formData.campaign
+    };
+
+    setPromoCodes(prev => [...prev, newItem]);
+    setShowCreateModal(false);
+    setFormData({
+      code: '',
+      type: 'percentage',
+      value: '',
+      minOrder: '',
+      maxUses: '',
+      expiryDate: '',
+      affiliate: '',
+      campaign: ''
+    });
+    setErrors({});
   };
 
   return (
@@ -170,7 +285,12 @@ const PromoCodesPage: React.FC = () => {
             <div className="ml-4">
               <p className="text-sm font-medium text-gray-600">Avg. Usage</p>
               <p className="text-2xl font-bold text-gray-900">
-                {Math.round(promoCodes.reduce((sum, code) => sum + getUsagePercentage(code.currentUses, code.maxUses), 0) / promoCodes.length)}%
+                {Math.round(
+                  promoCodes.reduce(
+                    (sum, code) => sum + getUsagePercentage(code.currentUses, code.maxUses),
+                    0
+                  ) / promoCodes.length
+                )}%
               </p>
             </div>
           </div>
@@ -291,25 +411,147 @@ const PromoCodesPage: React.FC = () => {
         </div>
       </div>
 
-      {/* Create/Edit Modal would go here */}
+      {/* Create/Edit Modal */}
       {showCreateModal && (
         <div className="fixed inset-0 bg-gray-600 bg-opacity-50 overflow-y-auto h-full w-full z-50">
           <div className="relative top-20 mx-auto p-5 border w-96 shadow-lg rounded-md bg-white">
-            <div className="mt-3 text-center">
-              <h3 className="text-lg font-medium text-gray-900">Create New Promo Code</h3>
-              <div className="mt-2 px-7 py-3">
-                <p className="text-sm text-gray-500">
-                  This feature would allow creating new promo codes with various settings.
-                </p>
-              </div>
-              <div className="items-center px-4 py-3">
+            <div className="mt-3">
+              <h3 className="text-lg font-medium text-gray-900 text-center">Create New Promo Code</h3>
+
+              {/* Replaced placeholder with the real form (kept same modal container design) */}
+              <form className="mt-4 space-y-3 px-1" onSubmit={handleCreateSubmit}>
+                {/* Code */}
+                <div>
+                  <label className="block text-sm font-medium text-gray-700">Promo Code</label>
+                  <input
+                    name="code"
+                    value={formData.code}
+                    onChange={handleFormChange}
+                    placeholder="e.g. SAVE10"
+                    className={`mt-1 w-full border rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500 ${errors.code ? 'border-red-500' : 'border-gray-300'}`}
+                  />
+                  {errors.code && <p className="text-xs text-red-600 mt-1">{errors.code}</p>}
+                </div>
+
+                {/* Type */}
+                <div>
+                  <label className="block text-sm font-medium text-gray-700">Discount Type</label>
+                  <select
+                    name="type"
+                    value={formData.type}
+                    onChange={handleFormChange}
+                    className={`mt-1 w-full border rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500 ${errors.type ? 'border-red-500' : 'border-gray-300'}`}
+                  >
+                    <option value="percentage">Percentage (%)</option>
+                    <option value="fixed">Fixed ($)</option>
+                  </select>
+                </div>
+
+                {/* Value */}
+                <div>
+                  <label className="block text-sm font-medium text-gray-700">Discount Value</label>
+                  <input
+                    type="number"
+                    name="value"
+                    value={formData.value}
+                    onChange={handleFormChange}
+                    placeholder={formData.type === 'percentage' ? '1 - 100' : 'Amount'}
+                    className={`mt-1 w-full border rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500 ${errors.value ? 'border-red-500' : 'border-gray-300'}`}
+                  />
+                  {errors.value && <p className="text-xs text-red-600 mt-1">{errors.value}</p>}
+                </div>
+
+                {/* Min order */}
+                <div>
+                  <label className="block text-sm font-medium text-gray-700">Minimum Order</label>
+                  <input
+                    type="number"
+                    name="minOrder"
+                    value={formData.minOrder}
+                    onChange={handleFormChange}
+                    placeholder="0 or more"
+                    className={`mt-1 w-full border rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500 ${errors.minOrder ? 'border-red-500' : 'border-gray-300'}`}
+                  />
+                  {errors.minOrder && <p className="text-xs text-red-600 mt-1">{errors.minOrder}</p>}
+                </div>
+
+                {/* Max uses */}
+                <div>
+                  <label className="block text-sm font-medium text-gray-700">Max Uses</label>
+                  <input
+                    type="number"
+                    name="maxUses"
+                    value={formData.maxUses}
+                    onChange={handleFormChange}
+                    placeholder="e.g. 100"
+                    className={`mt-1 w-full border rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500 ${errors.maxUses ? 'border-red-500' : 'border-gray-300'}`}
+                  />
+                  {errors.maxUses && <p className="text-xs text-red-600 mt-1">{errors.maxUses}</p>}
+                </div>
+
+                {/* Expiry */}
+                <div>
+                  <label className="block text-sm font-medium text-gray-700">Expiry Date</label>
+                  <input
+                    type="date"
+                    name="expiryDate"
+                    value={formData.expiryDate}
+                    onChange={handleFormChange}
+                    className={`mt-1 w-full border rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500 ${errors.expiryDate ? 'border-red-500' : 'border-gray-300'}`}
+                  />
+                  {errors.expiryDate && <p className="text-xs text-red-600 mt-1">{errors.expiryDate}</p>}
+                </div>
+
+                {/* Affiliate */}
+                <div>
+                  <label className="block text-sm font-medium text-gray-700">Assign to Affiliate</label>
+                  <select
+                    name="affiliate"
+                    value={formData.affiliate}
+                    onChange={handleFormChange}
+                    className={`mt-1 w-full border rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500 ${errors.affiliate ? 'border-red-500' : 'border-gray-300'}`}
+                  >
+                    <option value="">Select affiliate</option>
+                    {affiliates.map(a => (
+                      <option key={a} value={a}>{a}</option>
+                    ))}
+                  </select>
+                  {errors.affiliate && <p className="text-xs text-red-600 mt-1">{errors.affiliate}</p>}
+                </div>
+
+                {/* Campaign */}
+                <div>
+                  <label className="block text-sm font-medium text-gray-700">Assign to Campaign</label>
+                  <select
+                    name="campaign"
+                    value={formData.campaign}
+                    onChange={handleFormChange}
+                    className={`mt-1 w-full border rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500 ${errors.campaign ? 'border-red-500' : 'border-gray-300'}`}
+                  >
+                    <option value="">Select campaign</option>
+                    {campaigns.map(c => (
+                      <option key={c} value={c}>{c}</option>
+                    ))}
+                  </select>
+                  {errors.campaign && <p className="text-xs text-red-600 mt-1">{errors.campaign}</p>}
+                </div>
+
+                <div className="items-center pt-1">
+                  <button
+                    type="submit"
+                    className="w-full px-4 py-2 bg-blue-600 text-white text-base font-medium rounded-md shadow-sm hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                  >
+                    Save Promo Code
+                  </button>
+                </div>
                 <button
+                  type="button"
                   onClick={() => setShowCreateModal(false)}
-                  className="px-4 py-2 bg-blue-600 text-white text-base font-medium rounded-md w-full shadow-sm hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                  className="w-full mt-2 px-4 py-2 bg-gray-100 text-gray-800 text-base font-medium rounded-md shadow-sm hover:bg-gray-200 focus:outline-none"
                 >
-                  Close
+                  Cancel
                 </button>
-              </div>
+              </form>
             </div>
           </div>
         </div>
