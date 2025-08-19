@@ -262,9 +262,7 @@ const PayoutProcessing: React.FC = () => {
   }, [payouts]);
 
   const handleCreatePayout = () => {
-    const selectedMethod = payoutMethods.find(
-      (m) => m.type === newPayout.method
-    );
+    const selectedMethod = payoutMethods.find((m) => m.type === newPayout.method);
     const processingFee =
       (parseFloat(newPayout.amount) * (selectedMethod?.processingFee || 3)) /
       100;
@@ -573,9 +571,7 @@ const PayoutProcessing: React.FC = () => {
                         }
                         onChange={(e) => {
                           if (e.target.checked) {
-                            setSelectedPayouts(
-                              filteredPayouts.map((p) => p.id)
-                            );
+                            setSelectedPayouts(filteredPayouts.map((p) => p.id));
                           } else {
                             setSelectedPayouts([]);
                           }
@@ -636,9 +632,7 @@ const PayoutProcessing: React.FC = () => {
                         <div className="text-sm font-medium text-gray-900">
                           ${payout.amount.toFixed(2)} {payout.currency}
                         </div>
-                        <div className="text-xs text-gray-500">
-                          {payout.country}
-                        </div>
+                        <div className="text-xs text-gray-500">{payout.country}</div>
                       </td>
                       <td className="px-6 py-4 whitespace-nowrap">
                         <div className="flex items-center">
@@ -656,9 +650,7 @@ const PayoutProcessing: React.FC = () => {
                             )}`}
                           >
                             {getStatusIcon(payout.status)}
-                            <span className="ml-1 capitalize">
-                              {payout.status}
-                            </span>
+                            <span className="ml-1 capitalize">{payout.status}</span>
                           </span>
                           {payout.retryCount && payout.retryCount > 0 && (
                             <span className="ml-2 text-xs text-gray-500">
@@ -677,9 +669,7 @@ const PayoutProcessing: React.FC = () => {
                         <div className="flex space-x-2">
                           {payout.status === "pending" && (
                             <button
-                              onClick={() =>
-                                handleStatusUpdate(payout.id, "processing")
-                              }
+                              onClick={() => handleStatusUpdate(payout.id, "processing")}
                               className="text-blue-600 hover:text-blue-900"
                             >
                               Process
@@ -687,20 +677,15 @@ const PayoutProcessing: React.FC = () => {
                           )}
                           {payout.status === "failed" && (
                             <button
-                              onClick={() =>
-                                handleStatusUpdate(payout.id, "pending")
-                              }
+                              onClick={() => handleStatusUpdate(payout.id, "pending")}
                               className="text-green-600 hover:text-green-900"
                             >
                               Retry
                             </button>
                           )}
-                          {(payout.status === "pending" ||
-                            payout.status === "processing") && (
+                          {(payout.status === "pending" || payout.status === "processing") && (
                             <button
-                              onClick={() =>
-                                handleStatusUpdate(payout.id, "cancelled")
-                              }
+                              onClick={() => handleStatusUpdate(payout.id, "cancelled")}
                               className="text-red-600 hover:text-red-900"
                             >
                               Cancel
@@ -716,21 +701,34 @@ const PayoutProcessing: React.FC = () => {
           </div>
         </div>
 
-        {/* New Payout Modal */}
+        {/* New Payout Modal (centered popup) */}
         {showNewPayout && (
-          <div className="fixed inset-0 bg-gray-600 bg-opacity-50 overflow-y-auto h-full w-full z-50">
-            <div className="relative top-10 mx-auto p-5 border w-[500px] shadow-lg rounded-md bg-white">
-              <div className="mt-3">
-                <h3 className="text-lg font-medium text-gray-900 mb-4">
-                  Create New Payout
-                </h3>
+          <div
+            className="fixed inset-0 z-50 flex items-center justify-center bg-gray-900 bg-opacity-50"
+            role="dialog"
+            aria-modal="true"
+            onClick={() => setShowNewPayout(false)}
+          >
+            <div
+              className="relative bg-white rounded-lg shadow-lg w-full max-w-[720px] mx-4 max-h-[90vh] overflow-auto"
+              onClick={(e) => e.stopPropagation()}
+            >
+              <div className="p-6">
+                <div className="flex justify-between items-center">
+                  <h3 className="text-lg font-medium text-gray-900 mb-2">Create New Payout</h3>
+                  <button
+                    onClick={() => setShowNewPayout(false)}
+                    className="text-gray-500 hover:text-gray-700"
+                    aria-label="Close modal"
+                  >
+                    <XMarkIcon className="h-5 w-5" />
+                  </button>
+                </div>
 
                 <div className="space-y-4">
                   <div className="grid grid-cols-2 gap-4">
                     <div>
-                      <label className="block text-sm font-medium text-gray-700 mb-2">
-                        Affiliate Name
-                      </label>
+                      <label className="block text-sm font-medium text-gray-700 mb-2">Affiliate Name</label>
                       <input
                         type="text"
                         value={newPayout.affiliateName}
@@ -745,9 +743,7 @@ const PayoutProcessing: React.FC = () => {
                       />
                     </div>
                     <div>
-                      <label className="block text-sm font-medium text-gray-700 mb-2">
-                        Email
-                      </label>
+                      <label className="block text-sm font-medium text-gray-700 mb-2">Email</label>
                       <input
                         type="email"
                         value={newPayout.affiliateEmail}
@@ -765,9 +761,7 @@ const PayoutProcessing: React.FC = () => {
 
                   <div className="grid grid-cols-3 gap-4">
                     <div>
-                      <label className="block text-sm font-medium text-gray-700 mb-2">
-                        Amount
-                      </label>
+                      <label className="block text-sm font-medium text-gray-700 mb-2">Amount</label>
                       <div className="relative">
                         <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
                           <span className="text-gray-500 sm:text-sm">$</span>
@@ -789,9 +783,7 @@ const PayoutProcessing: React.FC = () => {
                       </div>
                     </div>
                     <div>
-                      <label className="block text-sm font-medium text-gray-700 mb-2">
-                        Currency
-                      </label>
+                      <label className="block text-sm font-medium text-gray-700 mb-2">Currency</label>
                       <select
                         value={newPayout.currency}
                         onChange={(e) =>
@@ -810,9 +802,7 @@ const PayoutProcessing: React.FC = () => {
                       </select>
                     </div>
                     <div>
-                      <label className="block text-sm font-medium text-gray-700 mb-2">
-                        Country
-                      </label>
+                      <label className="block text-sm font-medium text-gray-700 mb-2">Country</label>
                       <select
                         value={newPayout.country}
                         onChange={(e) =>
@@ -836,9 +826,7 @@ const PayoutProcessing: React.FC = () => {
                   </div>
 
                   <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-2">
-                      Payment Method
-                    </label>
+                    <label className="block text-sm font-medium text-gray-700 mb-2">Payment Method</label>
                     <select
                       value={newPayout.method}
                       onChange={(e) =>
@@ -857,14 +845,10 @@ const PayoutProcessing: React.FC = () => {
                   </div>
 
                   <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-2">
-                      Notes (Optional)
-                    </label>
+                    <label className="block text-sm font-medium text-gray-700 mb-2">Notes (Optional)</label>
                     <textarea
                       value={newPayout.notes}
-                      onChange={(e) =>
-                        setNewPayout({ ...newPayout, notes: e.target.value })
-                      }
+                      onChange={(e) => setNewPayout({ ...newPayout, notes: e.target.value })}
                       rows={3}
                       className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-blue-500 focus:border-blue-500"
                       placeholder="Additional notes or instructions..."
@@ -876,17 +860,14 @@ const PayoutProcessing: React.FC = () => {
                       <div className="text-sm space-y-1">
                         <div className="flex justify-between">
                           <span>Payout Amount:</span>
-                          <span className="font-medium">
-                            ${parseFloat(newPayout.amount || "0").toFixed(2)}
-                          </span>
+                          <span className="font-medium">${parseFloat(newPayout.amount || "0").toFixed(2)}</span>
                         </div>
                         <div className="flex justify-between">
                           <span>
                             Processing Fee (
                             {
-                              payoutMethods.find(
-                                (m) => m.type === newPayout.method
-                              )?.processingFee
+                              payoutMethods.find((m) => m.type === newPayout.method)
+                                ?.processingFee
                             }
                             %):
                           </span>
@@ -894,9 +875,8 @@ const PayoutProcessing: React.FC = () => {
                             -$
                             {(
                               (parseFloat(newPayout.amount || "0") *
-                                (payoutMethods.find(
-                                  (m) => m.type === newPayout.method
-                                )?.processingFee || 3)) /
+                                (payoutMethods.find((m) => m.type === newPayout.method)
+                                  ?.processingFee || 3)) /
                               100
                             ).toFixed(2)}
                           </span>
@@ -908,9 +888,8 @@ const PayoutProcessing: React.FC = () => {
                             {(
                               parseFloat(newPayout.amount || "0") -
                               (parseFloat(newPayout.amount || "0") *
-                                (payoutMethods.find(
-                                  (m) => m.type === newPayout.method
-                                )?.processingFee || 3)) /
+                                (payoutMethods.find((m) => m.type === newPayout.method)
+                                  ?.processingFee || 3)) /
                                 100
                             ).toFixed(2)}
                           </span>
@@ -944,34 +923,30 @@ const PayoutProcessing: React.FC = () => {
           </div>
         )}
 
-        {/* Bulk Payout Modal */}
+        {/* Bulk Payout Modal (centered popup) */}
         {showBulkPayout && (
-          <div className="fixed inset-0 bg-gray-600 bg-opacity-50 overflow-y-auto h-full w-full z-50">
-            <div className="relative top-20 mx-auto p-5 border w-96 shadow-lg rounded-md bg-white">
+          <div
+            className="fixed inset-0 z-50 flex items-center justify-center bg-gray-900 bg-opacity-50"
+            onClick={() => setShowBulkPayout(false)}
+          >
+            <div
+              className="relative top-0 mx-auto p-5 border w-full max-w-md shadow-lg rounded-md bg-white"
+              onClick={(e) => e.stopPropagation()}
+            >
               <div className="mt-3">
-                <h3 className="text-lg font-medium text-gray-900 mb-4">
-                  Bulk Process Payouts
-                </h3>
+                <h3 className="text-lg font-medium text-gray-900 mb-4">Bulk Process Payouts</h3>
 
                 <div className="mb-4">
                   <p className="text-sm text-gray-600 mb-2">
-                    You've selected {selectedPayouts.length} payouts for
-                    processing:
+                    You've selected {selectedPayouts.length} payouts for processing:
                   </p>
                   <div className="max-h-40 overflow-y-auto bg-gray-50 rounded-lg p-3">
                     {payouts
                       .filter((p) => selectedPayouts.includes(p.id))
                       .map((payout) => (
-                        <div
-                          key={payout.id}
-                          className="flex justify-between items-center py-1"
-                        >
-                          <span className="text-sm">
-                            {payout.affiliateName}
-                          </span>
-                          <span className="text-sm font-medium">
-                            ${payout.amount.toFixed(2)}
-                          </span>
+                        <div key={payout.id} className="flex justify-between items-center py-1">
+                          <span className="text-sm">{payout.affiliateName}</span>
+                          <span className="text-sm font-medium">${payout.amount.toFixed(2)}</span>
                         </div>
                       ))}
                   </div>

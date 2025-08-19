@@ -61,7 +61,7 @@ const AuthPage: React.FC = () => {
                   `w-full rounded-lg py-2.5 text-sm font-medium leading-5 flex items-center justify-center space-x-2
                    ${selected 
                      ? 'bg-white text-blue-700 shadow'
-                     : 'text-blue-100 hover:bg-white/[0.12] hover:text-white'
+                     : 'text-black '
                    }`
                 }
                 onClick={() => setSelectedType('merchant')}
@@ -74,7 +74,7 @@ const AuthPage: React.FC = () => {
                   `w-full rounded-lg py-2.5 text-sm font-medium leading-5 flex items-center justify-center space-x-2
                    ${selected 
                      ? 'bg-white text-blue-700 shadow'
-                     : 'text-blue-100 hover:bg-white/[0.12] hover:text-white'
+                     : 'text-black '
                    }`
                 }
                 onClick={() => setSelectedType('affiliate')}
