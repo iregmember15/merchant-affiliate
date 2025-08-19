@@ -938,8 +938,9 @@ const PayoutProcessing: React.FC = () => {
 
                 <div className="mb-4">
                   <p className="text-sm text-gray-600 mb-2">
-                    You've selected {selectedPayouts.length} payouts for processing:
-                  </p>
+  You&apos;ve selected {selectedPayouts.length} payouts for processing:
+</p>
+
                   <div className="max-h-40 overflow-y-auto bg-gray-50 rounded-lg p-3">
                     {payouts
                       .filter((p) => selectedPayouts.includes(p.id))
