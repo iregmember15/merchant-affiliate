@@ -59,12 +59,17 @@ const PayoutMethodManagement: React.FC = () => {
     null
   );
   const [payoutAmount, setPayoutAmount] = useState("");
+  const [currency, setCurrency] = useState("$");
+
   const [newMethod, setNewMethod] = useState({
     type: "paypal" as "stripe" | "paypal" | "wise",
     name: "",
     account: "",
     expiryDate: "",
   });
+
+  const [autoPayoutEnabled, setAutoPayoutEnabled] = useState(false);
+  const [minPayoutThreshold, setMinPayoutThreshold] = useState(50);
 
   const getMethodIcon = (type: string) => {
     switch (type) {
@@ -82,9 +87,7 @@ const PayoutMethodManagement: React.FC = () => {
   const getMethodColor = (type: string) => {
     switch (type) {
       case "stripe":
-        return "bg-blue-100 text-blue-800";
       case "paypal":
-        return "bg-blue-100 text-blue-800";
       case "wise":
         return "bg-blue-100 text-blue-800";
       default:
@@ -156,9 +159,11 @@ const PayoutMethodManagement: React.FC = () => {
     if (!showPayoutModal || !payoutAmount) return;
 
     const amount = parseFloat(payoutAmount);
+    const methodId = showPayoutModal.id;
+
     setPayoutMethods(
       payoutMethods.map((method) =>
-        method.id === showPayoutModal.id
+        method.id === methodId
           ? {
               ...method,
               creditBalance: method.creditBalance - amount,
@@ -173,6 +178,24 @@ const PayoutMethodManagement: React.FC = () => {
     setPayoutAmount("");
   };
 
+  const handleManualPayout = (method: PayoutMethod) => {
+    const amount = method.creditBalance;
+    if (!amount) return;
+
+    setPayoutMethods(
+      payoutMethods.map((m) =>
+        m.id === method.id
+          ? {
+              ...m,
+              creditBalance: 0,
+              pendingPayout: m.pendingPayout + amount,
+              lastUsed: new Date().toISOString().split("T")[0],
+            }
+          : m
+      )
+    );
+  };
+
   const totalCredits = payoutMethods.reduce(
     (sum, method) => sum + method.creditBalance,
     0
@@ -185,6 +208,7 @@ const PayoutMethodManagement: React.FC = () => {
   return (
     <div className="py-6">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 md:px-8">
+        {/* Header */}
         <div className="flex justify-between items-center">
           <h1 className="text-2xl font-semibold text-gray-900">
             Payout Methods
@@ -201,63 +225,69 @@ const PayoutMethodManagement: React.FC = () => {
         {/* Summary Cards */}
         <div className="mt-6 grid grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-3">
           <div className="bg-white overflow-hidden shadow rounded-lg">
-            <div className="p-5">
-              <div className="flex items-center">
-                <div className="flex-shrink-0">
-                  <CurrencyDollarIcon className="h-8 w-8 text-green-500" />
-                </div>
-                <div className="ml-5 w-0 flex-1">
-                  <dl>
-                    <dt className="text-sm font-medium text-gray-500 truncate">
-                      Total Credits
-                    </dt>
-                    <dd className="text-lg font-medium text-gray-900">
-                      ${totalCredits.toFixed(2)}
-                    </dd>
-                  </dl>
-                </div>
+            <div className="p-5 flex items-center">
+              <CurrencyDollarIcon className="h-8 w-8 text-green-500" />
+              <div className="ml-5">
+                <p className="text-sm text-gray-500">Total Credits</p>
+                <p className="text-lg font-medium text-gray-900">
+                  {currency}
+                  {totalCredits.toFixed(2)}
+                </p>
               </div>
             </div>
           </div>
-
           <div className="bg-white overflow-hidden shadow rounded-lg">
-            <div className="p-5">
-              <div className="flex items-center">
-                <div className="flex-shrink-0">
-                  <BanknotesIcon className="h-8 w-8 text-blue-500" />
-                </div>
-                <div className="ml-5 w-0 flex-1">
-                  <dl>
-                    <dt className="text-sm font-medium text-gray-500 truncate">
-                      Pending Payouts
-                    </dt>
-                    <dd className="text-lg font-medium text-gray-900">
-                      ${totalPending.toFixed(2)}
-                    </dd>
-                  </dl>
-                </div>
+            <div className="p-5 flex items-center">
+              <BanknotesIcon className="h-8 w-8 text-blue-500" />
+              <div className="ml-5">
+                <p className="text-sm text-gray-500">Pending Payouts</p>
+                <p className="text-lg font-medium text-gray-900">
+                  {currency}
+                  {totalPending.toFixed(2)}
+                </p>
               </div>
             </div>
           </div>
-
           <div className="bg-white overflow-hidden shadow rounded-lg">
-            <div className="p-5">
-              <div className="flex items-center">
-                <div className="flex-shrink-0">
-                  <CheckCircleIcon className="h-8 w-8 text-green-500" />
-                </div>
-                <div className="ml-5 w-0 flex-1">
-                  <dl>
-                    <dt className="text-sm font-medium text-gray-500 truncate">
-                      Active Methods
-                    </dt>
-                    <dd className="text-lg font-medium text-gray-900">
-                      {payoutMethods.length}
-                    </dd>
-                  </dl>
-                </div>
+            <div className="p-5 flex items-center">
+              <CheckCircleIcon className="h-8 w-8 text-green-500" />
+              <div className="ml-5">
+                <p className="text-sm text-gray-500">Active Methods</p>
+                <p className="text-lg font-medium text-gray-900">
+                  {payoutMethods.length}
+                </p>
               </div>
             </div>
+          </div>
+        </div>
+
+        {/* Auto Payout Settings */}
+        <div className="mt-6 bg-white shadow rounded-lg p-4">
+          <div className="flex items-center space-x-4">
+            <label className="flex items-center space-x-2">
+              <input
+                type="checkbox"
+                checked={autoPayoutEnabled}
+                onChange={(e) => setAutoPayoutEnabled(e.target.checked)}
+                className="h-4 w-4 text-blue-600"
+              />
+              <span className="text-sm font-medium text-gray-700">
+                Enable Auto Payout
+              </span>
+            </label>
+            {autoPayoutEnabled && (
+              <div className="flex items-center space-x-2">
+                <span className="text-sm text-gray-500">Min Threshold:</span>
+                <input
+                  type="number"
+                  value={minPayoutThreshold}
+                  onChange={(e) =>
+                    setMinPayoutThreshold(parseFloat(e.target.value))
+                  }
+                  className="border rounded-md px-2 py-1 text-sm w-20"
+                />
+              </div>
+            )}
           </div>
         </div>
 
@@ -295,45 +325,54 @@ const PayoutMethodManagement: React.FC = () => {
                   </div>
                 </div>
 
-                {/* Credit and Payout Information */}
+                {/* Credit and Payout Info */}
                 <div className="mt-4 bg-gray-50 rounded-lg p-4">
                   <div className="grid grid-cols-2 gap-4 text-sm">
                     <div>
                       <span className="text-gray-500">Credit Balance:</span>
                       <div className="font-semibold text-green-600">
-                        ${method.creditBalance.toFixed(2)}
+                        {currency}
+                        {method.creditBalance.toFixed(2)}
                       </div>
                     </div>
                     <div>
                       <span className="text-gray-500">Pending Payout:</span>
                       <div className="font-semibold text-blue-600">
-                        ${method.pendingPayout.toFixed(2)}
+                        {currency}
+                        {method.pendingPayout.toFixed(2)}
                       </div>
                     </div>
                   </div>
-
                   {method.creditBalance > 0 && (
-                    <button
-                      onClick={() => setShowPayoutModal(method)}
-                      className="mt-3 w-full bg-green-600 text-white px-3 py-2 rounded-md text-sm font-medium hover:bg-green-700"
-                    >
-                      Request Payout
-                    </button>
+                    <div className="mt-3 flex space-x-2">
+                      <button
+                        onClick={() => setShowPayoutModal(method)}
+                        className="flex-1 bg-green-600 text-white px-3 py-2 rounded-md text-sm font-medium hover:bg-green-700"
+                      >
+                        Request Payout
+                      </button>
+                      <button
+                        onClick={() => handleManualPayout(method)}
+                        className="flex-1 bg-blue-600 text-white px-3 py-2 rounded-md text-sm font-medium hover:bg-blue-600"
+                      >
+                        Manual Payout
+                      </button>
+                    </div>
                   )}
                 </div>
 
+                {/* Details */}
                 <div className="mt-4 space-y-2">
                   <div className="flex items-center justify-between">
                     <span className="text-sm text-gray-500">Type:</span>
                     <span
-                      className={`inline-flex px-2 py-1 text-xs font-semibold rounded-full ${getMethodColor(
+                      className={`inline-flex px-2 py-1 text-xs font-semibold ${getMethodColor(
                         method.type
                       )}`}
                     >
                       {method.type}
                     </span>
                   </div>
-
                   <div className="flex items-center justify-between">
                     <span className="text-sm text-gray-500">Status:</span>
                     <span
@@ -362,7 +401,7 @@ const PayoutMethodManagement: React.FC = () => {
                             isMethodExpired(method.expiryDate)
                               ? "text-red-600"
                               : isMethodExpiringSoon(method.expiryDate)
-                              ? "text-yellow-600"
+                              ? "text-gray-600"
                               : "text-gray-600"
                           }`}
                         >
@@ -372,7 +411,7 @@ const PayoutMethodManagement: React.FC = () => {
                           <ExclamationTriangleIcon className="h-3 w-3 ml-1 text-red-500" />
                         )}
                         {isMethodExpiringSoon(method.expiryDate) && (
-                          <ExclamationTriangleIcon className="h-3 w-3 ml-1 text-yellow-500" />
+                          <ExclamationTriangleIcon className="h-3 w-3 ml-1 text-red-600" />
                         )}
                       </div>
                     </div>
@@ -391,9 +430,7 @@ const PayoutMethodManagement: React.FC = () => {
 
                   <div className="flex items-center justify-between">
                     <span className="text-sm text-gray-500">Last Used:</span>
-                    <span className="text-xs text-gray-500">
-                      {method.lastUsed}
-                    </span>
+                    <span className="text-xs text-gray-500">{method.lastUsed}</span>
                   </div>
                 </div>
 
@@ -422,224 +459,132 @@ const PayoutMethodManagement: React.FC = () => {
           ))}
         </div>
 
-        {/* Payout Modal */}
+        {/* Request Payout Modal */}
         {showPayoutModal && (
-          <div className="fixed inset-0 bg-gray-600 bg-opacity-50 overflow-y-auto h-full w-full z-50">
-            <div className="relative top-20 mx-auto p-5 border w-96 shadow-lg rounded-md bg-white">
-              <div className="mt-3">
-                <h3 className="text-lg font-medium text-gray-900 mb-4">
-                  Request Payout
-                </h3>
-
-                <div className="mb-4 p-4 bg-gray-50 rounded-lg">
-                  <div className="flex items-center mb-2">
-                    {getMethodIcon(showPayoutModal.type)}
-                    <span className="ml-2 font-medium">
-                      {showPayoutModal.name}
-                    </span>
-                  </div>
-                  <div className="text-sm text-gray-600">
-                    Available Balance:{" "}
-                    <span className="font-semibold text-green-600">
-                      ${showPayoutModal.creditBalance.toFixed(2)}
-                    </span>
-                  </div>
-                </div>
-
-                <div className="space-y-4">
-                  <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-2">
-                      Payout Amount
-                    </label>
-                    <div className="relative">
-                      <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-                        <span className="text-gray-500 sm:text-sm">$</span>
-                      </div>
-                      <input
-                        type="number"
-                        step="0.01"
-                        min="0"
-                        max={showPayoutModal.creditBalance}
-                        value={payoutAmount}
-                        onChange={(e) => setPayoutAmount(e.target.value)}
-                        className="w-full pl-7 pr-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-blue-500 focus:border-blue-500"
-                        placeholder="0.00"
-                      />
-                    </div>
-                  </div>
-                </div>
-
-                <div className="flex justify-end space-x-3 mt-6">
-                  <button
-                    onClick={() => {
-                      setShowPayoutModal(null);
-                      setPayoutAmount("");
-                    }}
-                    className="px-4 py-2 text-sm font-medium text-gray-700 bg-gray-200 rounded-md hover:bg-gray-300"
-                  >
-                    Cancel
-                  </button>
-                  <button
-                    onClick={handlePayout}
-                    disabled={
-                      !payoutAmount ||
-                      parseFloat(payoutAmount) <= 0 ||
-                      parseFloat(payoutAmount) > showPayoutModal.creditBalance
-                    }
-                    className="px-4 py-2 text-sm font-medium text-white bg-green-600 rounded-md hover:bg-green-700 disabled:bg-gray-400 disabled:cursor-not-allowed"
-                  >
-                    Request Payout
-                  </button>
-                </div>
+          <div className="fixed inset-0 flex items-center justify-center z-50 bg-black bg-opacity-50">
+            <div className="bg-white p-6 rounded-md w-96">
+              <h3 className="text-lg font-medium text-gray-900 mb-4">
+                Request Payout - {showPayoutModal.name}
+              </h3>
+              <div className="mb-4">
+                <label className="block text-sm font-medium text-gray-700 mb-1">
+                  Amount ({currency})
+                </label>
+                <input
+                  type="number"
+                  value={payoutAmount}
+                  onChange={(e) => setPayoutAmount(e.target.value)}
+                  className="w-full border rounded-md px-3 py-2"
+                  min={0}
+                  max={showPayoutModal.creditBalance}
+                />
+              </div>
+              <div className="flex justify-end space-x-2">
+                <button
+                  onClick={() => setShowPayoutModal(null)}
+                  className="px-4 py-2 bg-gray-100 rounded-md text-sm font-medium hover:bg-gray-200"
+                >
+                  Cancel
+                </button>
+                <button
+                  onClick={handlePayout}
+                  className="px-4 py-2 bg-green-600 text-white rounded-md text-sm font-medium hover:bg-green-700"
+                >
+                  Request
+                </button>
               </div>
             </div>
           </div>
         )}
 
-        {/* Add/Edit Modal */}
+        {/* Add/Edit Payout Method Modal */}
         {(showAddModal || editingMethod) && (
-          <div className="fixed inset-0 bg-gray-600 bg-opacity-50 overflow-y-auto h-full w-full z-50">
-            <div className="relative top-20 mx-auto p-5 border w-96 shadow-lg rounded-md bg-white">
-              <div className="mt-3">
-                <h3 className="text-lg font-medium text-gray-900 mb-4">
-                  {editingMethod ? "Edit Payout Method" : "Add Payout Method"}
-                </h3>
-
-                <div className="space-y-4">
-                  <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-2">
-                      Method Type
-                    </label>
-                    <select
-                      value={
-                        editingMethod ? editingMethod.type : newMethod.type
-                      }
-                      onChange={(e) => {
-                        if (editingMethod) {
-                          setEditingMethod({
-                            ...editingMethod,
-                            type: e.target.value as any,
-                          });
-                        } else {
-                          setNewMethod({
-                            ...newMethod,
-                            type: e.target.value as any,
-                          });
-                        }
-                      }}
-                      className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-blue-500 focus:border-blue-500"
-                    >
-                      <option value="paypal">PayPal</option>
-                      <option value="stripe">Stripe</option>
-                      <option value="wise">Wise</option>
-                    </select>
-                  </div>
-
-                  <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-2">
-                      Account Name
-                    </label>
-                    <input
-                      type="text"
-                      value={
-                        editingMethod ? editingMethod.name : newMethod.name
-                      }
-                      onChange={(e) => {
-                        if (editingMethod) {
-                          setEditingMethod({
-                            ...editingMethod,
-                            name: e.target.value,
-                          });
-                        } else {
-                          setNewMethod({ ...newMethod, name: e.target.value });
-                        }
-                      }}
-                      className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-blue-500 focus:border-blue-500"
-                      placeholder="e.g., My PayPal Account"
-                    />
-                  </div>
-
-                  <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-2">
-                      Account Details
-                    </label>
-                    <input
-                      type="text"
-                      value={
-                        editingMethod
-                          ? editingMethod.account
-                          : newMethod.account
-                      }
-                      onChange={(e) => {
-                        if (editingMethod) {
-                          setEditingMethod({
-                            ...editingMethod,
-                            account: e.target.value,
-                          });
-                        } else {
-                          setNewMethod({
-                            ...newMethod,
-                            account: e.target.value,
-                          });
-                        }
-                      }}
-                      className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-blue-500 focus:border-blue-500"
-                      placeholder="Email, account number, etc."
-                    />
-                  </div>
-
-                  <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-2">
-                      Expiry Date (Optional)
-                    </label>
-                    <input
-                      type="date"
-                      value={
-                        editingMethod
-                          ? editingMethod.expiryDate || ""
-                          : newMethod.expiryDate
-                      }
-                      onChange={(e) => {
-                        if (editingMethod) {
-                          setEditingMethod({
-                            ...editingMethod,
-                            expiryDate: e.target.value,
-                          });
-                        } else {
-                          setNewMethod({
-                            ...newMethod,
-                            expiryDate: e.target.value,
-                          });
-                        }
-                      }}
-                      className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-blue-500 focus:border-blue-500"
-                    />
-                  </div>
-                </div>
-
-                <div className="flex justify-end space-x-3 mt-6">
-                  <button
-                    onClick={() => {
-                      setShowAddModal(false);
-                      setEditingMethod(null);
-                    }}
-                    className="px-4 py-2 text-sm font-medium text-gray-700 bg-gray-200 rounded-md hover:bg-gray-300"
+          <div className="fixed inset-0 flex items-center justify-center z-50 bg-black bg-opacity-50">
+            <div className="bg-white p-6 rounded-md w-96">
+              <h3 className="text-lg font-medium text-gray-900 mb-4">
+                {editingMethod ? "Edit" : "Add"} Payout Method
+              </h3>
+              <div className="space-y-3">
+                <div>
+                  <label className="block text-sm font-medium text-gray-700">
+                    Type
+                  </label>
+                  <select
+                    value={editingMethod?.type || newMethod.type}
+                    onChange={(e) =>
+                      editingMethod
+                        ? setEditingMethod({ ...editingMethod, type: e.target.value as any })
+                        : setNewMethod({ ...newMethod, type: e.target.value as any })
+                    }
+                    className="mt-1 w-full border rounded-md px-3 py-2"
                   >
-                    Cancel
-                  </button>
-                  <button
-                    onClick={() => {
-                      if (editingMethod) {
-                        handleEditMethod();
-                      } else {
-                        handleAddMethod();
-                      }
-                    }}
-                    className="px-4 py-2 text-sm font-medium text-white bg-blue-600 rounded-md hover:bg-blue-700"
-                  >
-                    {editingMethod ? "Update" : "Add Method"}
-                  </button>
+                    <option value="paypal">PayPal</option>
+                    <option value="stripe">Stripe</option>
+                    <option value="wise">Wise</option>
+                  </select>
                 </div>
+                <div>
+                  <label className="block text-sm font-medium text-gray-700">
+                    Name
+                  </label>
+                  <input
+                    type="text"
+                    value={editingMethod?.name || newMethod.name}
+                    onChange={(e) =>
+                      editingMethod
+                        ? setEditingMethod({ ...editingMethod, name: e.target.value })
+                        : setNewMethod({ ...newMethod, name: e.target.value })
+                    }
+                    className="mt-1 w-full border rounded-md px-3 py-2"
+                  />
+                </div>
+                <div>
+                  <label className="block text-sm font-medium text-gray-700">
+                    Account
+                  </label>
+                  <input
+                    type="text"
+                    value={editingMethod?.account || newMethod.account}
+                    onChange={(e) =>
+                      editingMethod
+                        ? setEditingMethod({ ...editingMethod, account: e.target.value })
+                        : setNewMethod({ ...newMethod, account: e.target.value })
+                    }
+                    className="mt-1 w-full border rounded-md px-3 py-2"
+                  />
+                </div>
+                <div>
+                  <label className="block text-sm font-medium text-gray-700">
+                    Expiry Date
+                  </label>
+                  <input
+                    type="date"
+                    value={editingMethod?.expiryDate || newMethod.expiryDate}
+                    onChange={(e) =>
+                      editingMethod
+                        ? setEditingMethod({ ...editingMethod, expiryDate: e.target.value })
+                        : setNewMethod({ ...newMethod, expiryDate: e.target.value })
+                    }
+                    className="mt-1 w-full border rounded-md px-3 py-2"
+                  />
+                </div>
+              </div>
+              <div className="flex justify-end space-x-2 mt-4">
+                <button
+                  onClick={() => {
+                    setShowAddModal(false);
+                    setEditingMethod(null);
+                  }}
+                  className="px-4 py-2 bg-gray-100 rounded-md text-sm font-medium hover:bg-gray-200"
+                >
+                  Cancel
+                </button>
+                <button
+                  onClick={editingMethod ? handleEditMethod : handleAddMethod}
+                  className="px-4 py-2 bg-blue-600 text-white rounded-md text-sm font-medium hover:bg-blue-700"
+                >
+                  {editingMethod ? "Update" : "Add"}
+                </button>
               </div>
             </div>
           </div>
